@@ -36,15 +36,25 @@ class PrefsDialog(wx.Dialog):
         
         topSizer   = wx.BoxSizer(wx.VERTICAL)
         inputSizer = wx.BoxSizer(wx.HORIZONTAL)
+        autoArchiveSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer   = wx.BoxSizer(wx.HORIZONTAL)
         
-        #wx.StaticBox(self.panel, wx.ID_ANY, 'Snapshot', (5,5), size=(394, 50))
-        labelSnapshotRoot = wx.StaticText(self.panel, wx.ID_ANY, 'Snapshots Root Directory:')
+        # load config ini file
         config = ConfigParser.RawConfigParser()
         config.read('config.ini')
-        self.tbRoot = wx.TextCtrl(self.panel, wx.ID_ANY, config.get('snapshot', 'root'))
+
+        #wx.StaticBox(self.panel, wx.ID_ANY, 'Snapshot', (5,5), size=(394, 50))
+        labelSnapshotRoot = wx.StaticText(self.panel, wx.ID_ANY, 'Snapshots Root Directory: ')
+        self.tbRoot = wx.TextCtrl(self.panel, wx.ID_ANY, config.get('snapshot', 'root'), size=(300, -1))
         inputSizer.Add(labelSnapshotRoot, 0, wx.ALL, 5)
         inputSizer.Add(self.tbRoot, 1, wx.ALL|wx.EXPAND, 5)
+
+        autoArchive = wx.StaticText(self.panel, wx.ID_ANY, 'Auto archive after: ')
+        self.tbAutoArc = wx.TextCtrl(self.panel, wx.ID_ANY, config.get('snapshot', 'autoArchive'), size=(40, -1))
+        autoArchiveDays = wx.StaticText(self.panel, wx.ID_ANY, ' days')
+        autoArchiveSizer.Add(autoArchive, 0, wx.ALL, 5)
+        autoArchiveSizer.Add(self.tbAutoArc, 1, wx.ALL, 5)
+        autoArchiveSizer.Add(autoArchiveDays, 2, wx.ALL, 5)
 
         okBtn = wx.Button(self.panel, wx.ID_ANY, 'OK')
         cancelBtn = wx.Button(self.panel, wx.ID_ANY, 'Cancel')
@@ -54,6 +64,7 @@ class PrefsDialog(wx.Dialog):
         btnSizer.Add(cancelBtn,  0, wx.ALL, 5)
         
         topSizer.Add(inputSizer, 0, wx.ALL|wx.EXPAND, 5)
+        topSizer.Add(autoArchiveSizer, 0, wx.ALL|wx.EXPAND, 5)
         topSizer.Add(wx.StaticLine(self.panel), 0, wx.ALL|wx.EXPAND, 5)
         topSizer.Add(btnSizer, 0, wx.ALIGN_RIGHT|wx.RIGHT, 5)
         
@@ -64,6 +75,7 @@ class PrefsDialog(wx.Dialog):
         config = ConfigParser.RawConfigParser()
         config.read('config.ini')
         config.set('snapshot', 'root', self.tbRoot.GetValue())
+        config.set('snapshot', 'autoArchive', self.tbAutoArc.GetValue())
         config.write( open('config.ini', 'wb') )
         self.EndModal(wx.ID_OK)
     

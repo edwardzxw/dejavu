@@ -12,4 +12,4 @@ Right click it would pop-up preference menu which allows you to set the root dir
 
 It's pretty simple, but do save my time creating those directories manually.
 
-I have some new ideas to make it serve me better, currently the one I'm working on is logged as issue #1.
+I have some new ideas to make it serve me better, currently the one I'm working on is logged as [issue #1](/edwardzxw/tools/issues/1).
